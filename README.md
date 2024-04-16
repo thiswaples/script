@@ -25,6 +25,8 @@ local PlayerBackpack = LocalPlayer.Backpack
 
 local PlayerCamera = workspace.Camera
 
+wait(5)
+
 pcall(function()
 	local PlayGui = PlayerGui:FindFirstChild("Play")
 	PlayGui:Destroy()
