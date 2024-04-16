@@ -25,19 +25,23 @@ local PlayerBackpack = LocalPlayer.Backpack
 
 local PlayerCamera = workspace.Camera
 
-wait(5)
-
 pcall(function()
 	local PlayGui = PlayerGui:FindFirstChild("Play")
 	PlayGui:Destroy()
 end)
+
+wait(1)
 
 pcall(function()
 	local BlurLightning = LightningService:FindFirstChild("Blur")
 	BlurLightning:Destroy()
 end)
 
+wait(1)
+
 PlayerCamera.CameraType = Enum.CameraType.Custom
+
+wait(1)
 
 pcall(function()
 	local MainGui = PlayerGui:FindFirstChild("Main")
@@ -68,8 +72,15 @@ end
 
 -- START AUTO HATCHING & FISHING
 
+wait(1)
+
 teleport(FishingTeleportCFrame)
+
+wait(1)
+
 equipBestTool()
+
+wait(1)
 
 spawn(function()
 	local CanAutoHatch,err1 = pcall(function()
