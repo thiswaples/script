@@ -1,220 +1,141 @@
-local RS = game:GetService("ReplicatedStorage")
-local Lightning = game:GetService("Lighting")
+--DELFE'S ULTRA MEGA SCRIPT WOWOWOW
 
-local Remotes = nil
-local RHatching = nil
+local PlayersService = game:GetService("Players")
+local ReplicatedStorageService = game:GetService("ReplicatedStorage")
+local LightningService = game:GetService("Lighting")
 
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
 
-local RLoading = nil
-local RLD = nil
-local SM = nil
-local Fishing = nil
-local Dungeons = nil
-local Easy = nil
-local Dungeon = nil
-local Door = nil
-local DTP = nil
-local Chest = nil
-local CTP = nil
+print("Delfe's Aura RNG Script -> Game Loaded!")
 
+local LocalPlayer = PlayersService.LocalPlayer
 
-local SG = nil
-local SFG = nil
-local TSFG = nil
-local Blur = nil
-local TP = nil
+repeat wait() until LocalPlayer.Character
 
-local player = game.Players.LocalPlayer
+print("Delfe's Aura RNG Script -> Character Loaded!")
 
-local MainGui = nil
-local PlayGui = nil
+local PlayerCharacter = LocalPlayer.Character
+local Humanoid = PlayerCharacter.Humanoid
+local HumanoidRootPart = PlayerCharacter.HumanoidRootPart
 
-local Camera = nil
-local Character = nil
-local HRP = nil
+local PlayerGui = LocalPlayer.PlayerGui
+local PlayerBackpack = LocalPlayer.Backpack
 
-wait(10)
+local PlayerCamera = workspace.Camera
 
+pcall(function()
+	local PlayGui = PlayerGui:FindFirstChild("Play")
+	PlayGui:Destroy()
+end)
 
-function CV()
-	if Character==nil then
-		Character = player.Character
-	end
-	if HRP==nil then
-		HRP = Character:FindFirstChild("HumanoidRootPart")
-	end
-	if MainGui==nil then
-		MainGui = player.PlayerGui:FindFirstChild("Main")
-	end
-	if PlayGui==nil then
-		PlayGui = player.PlayerGui:FindFirstChild("Play")
-	end
-	if Camera==nil then
-		Camera = workspace.Camera
-	end
-	if Remotes ==nil then
-		Remotes = RS:FindFirstChild("Remotes")
-	end
-	if RHatching == nil then
-		RHatching = Remotes:FindFirstChild("Hatching")
-	end
-	if RLoading ==nil then
-		RLoading = Remotes:FindFirstChild("RLoading")
-	end
-	if RLD == nil then
-		RLD = Remotes:FindFirstChild("LeftDungeon")
-	end
-	if SM == nil then
-		SM = workspace:FindFirstChild("ScriptedMap")
-	end
-	if Fishing == nil then
-		Fishing = SM:FindFirstChild("Fishing")
-	end
-	if Dungeons ==nil then
-		Dungeons = SM:FindFirstChild("Dungeons")
-	end
-	if Easy == nil then
-		Easy = Dungeons:FindFirstChild("Easy")
-	end
-	if Door == nil then
-		Door = Easy:FindFirstChild("Door")
-	end
-	if DTP == nil then
-		DTP = Door:FindFirstChild("Main")
-	end
-	if SG == nil then
-		SG = DTP:FindFirstChild("SurfaceGui")
-	end
-	if SFG == nil then
-		SFG = SG:FindFirstChild("Frame")
-	end
-	if TSFG == nil then
-		TSFG = SFG:FindFirstChild("Text")
-	end
+pcall(function()
+	local BlurLightning = LightningService:FindFirstChild("Blur")
+	BlurLightning:Destroy()
+end)
 
-	if Blur==nil then
-		Blur = Lightning:FindFirstChild("Blur")
-	end
-	if TP ==nil then
-		TP = Fishing:FindFirstChild("Part")
-	end
+PlayerCamera.CameraType = Enum.CameraType.Custom
+
+local FishingTeleportCFrame = CFrame.new(-413, 40, 52)
+
+function teleport(CF:CFrame)
+	HumanoidRootPart.CFrame = CF
+end
+
+function equipBestTool()
+	Humanoid:UnequipTools()
+	pcall(function()
+		local ChromaticHeart = PlayerBackpack:FindFirstChild("Chromatic Heart")
+		Humanoid:EquipTool(ChromaticHeart)
+	end)
+	pcall(function()
+		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zent")
+		Humanoid:EquipTool(BookOfZen)
+	end)
+	pcall(function()
+		local RubyOfDestiny = PlayerBackpack:FindFirstChild("Ruby of Destiny")
+		Humanoid:EquipTool(RubyOfDestiny)
+	end)
+end
 
 
-	if Chest == nil then
-		for i,v in Easy:GetChildren() do
+-- START AUTO HATCHING & FISHING
+spawn(function()
+	teleport(FishingTeleportCFrame)
+	equipBestTool()
+	
+	local HatchingRemote = nil
+	local CanAutoHatch,err1 = pcall(function()
+		HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
+	end)
+	local FishingRemote = nil
+	local CanAutoFishing,err2 = pcall(function()
+		FishingRemote = ReplicatedStorageService.Remotes.Fish
+	end)
+	
+	if CanAutoHatch then
+		spawn(function()
+			while wait(.1) do
+				HatchingRemote:InvokeServer()
+			end
+		end)
+	else print(err1) end
+	
+	if CanAutoFishing then
+		spawn(function()
+			while wait(.1) do
+				FishingRemote:InvokeServer()
+			end
+		end)
+	else print(err2) end
+	
+end)
+
+-- START AUTO DUNGEON
+spawn(function()
+	local DungeonEntranceCFrame = nil
+	local DungeonLeaveRemote = nil
+	local DungeonChestCFrame = nil
+	local DungeonTextUI = nil
+	
+	local CanDungeon,err = pcall(function()
+		local EasyDungeonFolder = workspace.ScriptedMap.Dungeons.Easy
+		DungeonEntranceCFrame = EasyDungeonFolder.Door.Main.CFrame
+		DungeonTextUI = EasyDungeonFolder.Door.Main.SurfaceGui.Frame.Text
+		for i,v in EasyDungeonFolder:GetChildren() do
 			for ii,vv in v:GetChildren() do
-				if vv.Name=="DUNGEON CHEST 1" then
-					Dungeon = v
-					Chest = vv
+				if vv.Name == "DUNGEON CHEST 1" then
+					DungeonChestCFrame = vv["Plane.001"].CFrame
 				end
 			end
 		end
-	end
-	if CTP == nil then
-		CTP = Chest:FindFirstChild("Plane.001")
-	end
-
-end
-
-
-function WFC()
-	while wait() do
-		local succ,err = pcall(function()
-			CV()
-		end)
-		if succ then
-			break
-		else
-			print(err)
-		end
-	end
-end
-
-while true do
-	wait(1)
-	if MainGui~=nil and Camera~=nil then
-		if PlayGui~=nil and Blur ~=nil then
-			PlayGui.Enabled = false
-			Blur.Enabled = false
-		else
-			local succ,err = pcall(function()
-				CV()
-			end)
-			if not succ then
-				break
+		DungeonLeaveRemote = ReplicatedStorageService.Remotes.LeftDungeon
+	end)
+	
+	if CanDungeon then
+		spawn(function()
+			while wait(1) do
+				if DungeonTextUI.Text == "" then
+					teleport(DungeonEntranceCFrame)
+					wait(2)
+					teleport(DungeonChestCFrame)
+					wait(3)
+					DungeonLeaveRemote:FireServer()
+					wait(3)
+					teleport(FishingTeleportCFrame)
+					equipBestTool()
+				end
 			end
-		end
-		Camera.CameraType = Enum.CameraType.Custom
-		MainGui.Enabled = true
-		break
+		end)
 	else
-		WFC()
-	end
-end
-
-spawn(function()
-	while task.wait(0.1) do
-		local RHatch = RHatching:FindFirstChild("Hatch")
-		local RFish = Remotes:FindFirstChild("Fish")
-		if RHatch ~=nil then RHatch:InvokeServer() else WFC() end
-		if RFish ~=nil then RFish:InvokeServer() else WFC() end
+		print(err)
 	end
 end)
 
 
-function TPF()
-	while wait() do
-		if HRP~=nil and TP ~= nil then
-			HRP.CFrame = TP.CFrame
-			break
-		else
-			WFC()
-		end
-	end
-end
 
-function TPD()
-	while wait() do
-		if HRP ~= nil and DTP ~=nil then
-			HRP.CFrame = DTP.CFrame
-			break
-		else
-			WFC()
-		end
-	end
-end
 
-function TPC()
-	while wait() do
-		if HRP ~= nil and CTP ~=nil then
-			HRP.CFrame = CTP.CFrame
-			break
-		else
-			WFC()
-		end
-	end
-end
 
-TPF()
 
-while true do	
-
-	if TSFG ~= nil and RLD ~= nil then
-		if TSFG.Text=="" then
-			spawn(function()
-				TPD()
-				wait(1)
-				TPC()
-				wait(3)
-				RLD:FireServer()
-				wait(3)
-				TPF()
-			end)
-		end
-	else
-		WFC()
-	end
-	
-	task.wait(5)
-end
 
