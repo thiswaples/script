@@ -64,36 +64,43 @@ function equipBestTool()
 	end)
 end
 
-
 -- START AUTO HATCHING & FISHING
 spawn(function()
 	teleport(FishingTeleportCFrame)
 	equipBestTool()
 	
 	local HatchingRemote = nil
-	local CanAutoHatch,err1 = pcall(function()
-		HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
-	end)
+	while wait() do
+		local CanAutoHatch,err1 = pcall(function()
+			HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
+		end)
+		if CanAutoHatch then
+			break
+		end
+	end
 	local FishingRemote = nil
-	local CanAutoFishing,err2 = pcall(function()
-		FishingRemote = ReplicatedStorageService.Remotes.Fish
+	while wait() do
+		local CanAutoFishing,err2 = pcall(function()
+			FishingRemote = ReplicatedStorageService.Remotes.Fish
+		end)
+		if CanAutoFishing then
+			break
+		end
+	end
+	
+	
+	
+	spawn(function()
+		while wait(.1) do
+			HatchingRemote:InvokeServer()
+		end
 	end)
-	
-	if CanAutoHatch then
-		spawn(function()
-			while wait(.1) do
-				HatchingRemote:InvokeServer()
-			end
-		end)
-	else print(err1) end
-	
-	if CanAutoFishing then
-		spawn(function()
-			while wait(.1) do
-				FishingRemote:InvokeServer()
-			end
-		end)
-	else print(err2) end
+
+	spawn(function()
+		while wait(.1) do
+			FishingRemote:InvokeServer()
+		end
+	end)
 	
 end)
 
