@@ -91,12 +91,14 @@ spawn(function()
 	
 	
 	spawn(function()
+		print("Hatching..")
 		while wait(.1) do
 			HatchingRemote:InvokeServer()
 		end
 	end)
 
 	spawn(function()
+		print("Fishing..")
 		while wait(.1) do
 			FishingRemote:InvokeServer()
 		end
