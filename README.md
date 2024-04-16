@@ -65,46 +65,32 @@ function equipBestTool()
 end
 
 -- START AUTO HATCHING & FISHING
-spawn(function()
-	teleport(FishingTeleportCFrame)
-	equipBestTool()
-	
-	local HatchingRemote = nil
-	while wait() do
-		local CanAutoHatch,err1 = pcall(function()
-			HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
-		end)
-		if CanAutoHatch then
-			break
-		end
-	end
-	local FishingRemote = nil
-	while wait() do
-		local CanAutoFishing,err2 = pcall(function()
-			FishingRemote = ReplicatedStorageService.Remotes.Fish
-		end)
-		if CanAutoFishing then
-			break
-		end
-	end
-	
-	
-	
-	spawn(function()
-		print("Hatching..")
-		while wait(.1) do
-			HatchingRemote:InvokeServer()
-		end
-	end)
 
-	spawn(function()
-		print("Fishing..")
-		while wait(.1) do
-			FishingRemote:InvokeServer()
-		end
+teleport(FishingTeleportCFrame)
+equipBestTool()
+
+spawn(function()
+	local CanAutoHatch,err1 = pcall(function()
+		local HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
+		spawn(function()
+			while wait(.1) do
+				HatchingRemote:InvokeServer()
+			end
+		end)
 	end)
-	
 end)
+
+spawn(function()
+	local CanAutoFishing,err1 = pcall(function()
+		local FishingRemote = ReplicatedStorageService.Remotes.Fish
+		spawn(function()
+			while wait(.1) do
+				FishingRemote:InvokeServer()
+			end
+		end)
+	end)
+end)
+
 
 -- START AUTO DUNGEON
 spawn(function()
