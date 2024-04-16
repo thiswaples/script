@@ -31,6 +31,11 @@ pcall(function()
 end)
 
 pcall(function()
+	local MainGui = PlayerGui:FindFirstChild("Main")
+	MainGui.Enabled = true
+end)
+
+pcall(function()
 	local BlurLightning = LightningService:FindFirstChild("Blur")
 	BlurLightning:Destroy()
 end)
