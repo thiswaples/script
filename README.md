@@ -31,16 +31,16 @@ pcall(function()
 end)
 
 pcall(function()
-	local MainGui = PlayerGui:FindFirstChild("Main")
-	MainGui.Enabled = true
-end)
-
-pcall(function()
 	local BlurLightning = LightningService:FindFirstChild("Blur")
 	BlurLightning:Destroy()
 end)
 
 PlayerCamera.CameraType = Enum.CameraType.Custom
+
+pcall(function()
+	local MainGui = PlayerGui:FindFirstChild("Main")
+	MainGui.Enabled = true
+end)
 
 local FishingTeleportCFrame = CFrame.new(-413, 40, 52)
 
@@ -117,6 +117,8 @@ spawn(function()
 		end
 		DungeonLeaveRemote = ReplicatedStorageService.Remotes.LeftDungeon
 	end)
+	
+	wait(5)
 	
 	if CanDungeon then
 		spawn(function()
