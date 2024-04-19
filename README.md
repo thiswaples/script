@@ -25,6 +25,8 @@ local PlayerBackpack = LocalPlayer.Backpack
 
 local PlayerCamera = workspace.Camera
 
+wait(5)
+
 pcall(function()
 	local PlayGui = PlayerGui:FindFirstChild("Play")
 	PlayGui:Destroy()
@@ -55,7 +57,7 @@ function equipBestTool()
 		Humanoid:EquipTool(ChromaticHeart)
 	end)
 	pcall(function()
-		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zent")
+		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zen")
 		Humanoid:EquipTool(BookOfZen)
 	end)
 	pcall(function()
@@ -67,7 +69,6 @@ end
 -- START AUTO HATCHING & FISHING
 
 teleport(FishingTeleportCFrame)
-
 equipBestTool()
 
 spawn(function()
@@ -112,33 +113,20 @@ spawn(function()
 			end
 		end
 		DungeonLeaveRemote = ReplicatedStorageService.Remotes.LeftDungeon
-	end)
-	
-	wait(5)
-	
-	if CanDungeon then
-		spawn(function()
-			while wait(1) do
-				if DungeonTextUI.Text == "" then
-					teleport(DungeonEntranceCFrame)
-					wait(2)
-					teleport(DungeonChestCFrame)
-					wait(3)
-					DungeonLeaveRemote:FireServer()
-					wait(3)
-					teleport(FishingTeleportCFrame)
-					equipBestTool()
-				end
+		
+		wait(5)
+		
+		while wait(1) do
+			if DungeonTextUI.Text == "" then
+				teleport(DungeonEntranceCFrame)
+				wait(2)
+				teleport(DungeonChestCFrame)
+				wait(3)
+				DungeonLeaveRemote:FireServer()
+				wait(3)
+				teleport(FishingTeleportCFrame)
+				equipBestTool()
 			end
-		end)
-	else
-		print(err)
-	end
+		end
+	end)
 end)
-
-
-
-
-
-
-
