@@ -106,7 +106,7 @@ function findRemotes()
 			print("Changed 2!")
 		end)
 		print(PlayerGui.Main.Stats.Frame.Rolls.Value.Text)
-		print(PlayerGui.Main.Stats.Frame.FIshed.Value.Text)
+		print(PlayerGui.Main.Stats.Frame.Fished.Value.Text)
 		
 		while FishingRemote==nil or HatchingRemote==nil do
 			for i,v in HashedRemotes do
