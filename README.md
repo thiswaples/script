@@ -93,9 +93,6 @@ function findRemotes()
 			end
 		end
 		
-		local GetDataRemote = ReplicatedStorageService.Remotes:FindFirstChild("GetData")
-		GetDataRemote:InvokeServer()
-		
 		local StatsFolder = PlayerGui.Main.Stats.Frame
 		
 		
@@ -110,7 +107,7 @@ function findRemotes()
 				end
 				
 				pcall(function()
-				v:InvokeServer()
+					v:InvokeServer()
 				end)
 				wait(2)
 				
