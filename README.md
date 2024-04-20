@@ -106,9 +106,15 @@ function findRemotes()
 					continue
 				end
 				
-				pcall(function()
+				local a,b = pcall(function()
 					v:InvokeServer()
 				end)
+				
+				
+				if a then
+					v:InvokeServer()
+				end
+				
 				wait(2)
 				
 				--if RollCountChanged then
