@@ -105,6 +105,7 @@ function findRemotes()
 				local OldHatchingStat = StatsFolder.Rolls.Value.Text
 				
 				if OldFishingStat =="0" or OldHatchingStat =="0" then
+					wait(.1)
 					continue
 				end
 				
