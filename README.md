@@ -104,7 +104,7 @@ function findRemotes()
 				local OldFishingStat = StatsFolder.Fished.Value.Text
 				local OldHatchingStat = StatsFolder.Rolls.Value.Text
 				
-				if OldFishingStat <=0 or OldHatchingStat <=0 then
+				if OldFishingStat =="0" or OldHatchingStat =="0" then
 					continue
 				end
 				
