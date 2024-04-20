@@ -101,7 +101,7 @@ function findRemotes()
 		end)
 		
 		PlayerGui.Main.Stats.Frame.Fished.Value.Changed:Connect(function()
-			RollCountChanged = true
+			FishedCountChanged = true
 		end)
 		
 		while FishingRemote==nil or HatchingRemote==nil do
