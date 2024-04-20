@@ -117,7 +117,10 @@ function findRemotes()
 				
 				print(PlayerGui.Main.Stats.Frame.Fished.Value.Text)
 				
-				v:InvokeServer()
+				pcall(function()
+					v:InvokeServer()
+				end)
+				
 				wait(2)
 				
 				--if RollCountChanged then
