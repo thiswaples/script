@@ -88,7 +88,7 @@ function findRemotes()
 		local HashedRemotes = {}
 		
 		for i,v in ReplicatedStorageService.Remotes:GetDescendants() do
-			if #v.Name == 36 then
+			if v:IsA("RemoteFunction") and #v.Name == 36 then
 				table.insert(HashedRemotes,v)
 			end
 		end
@@ -106,14 +106,7 @@ function findRemotes()
 					continue
 				end
 				
-				local a,b = pcall(function()
-					v:InvokeServer()
-				end)
-				
-				
-				if a then
-					v:InvokeServer()
-				end
+				v:InvokeServer()
 				
 				wait(2)
 				
