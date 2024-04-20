@@ -50,32 +50,20 @@ function teleport(CF:CFrame)
 	HumanoidRootPart.CFrame = CF
 end
 
-function equipBestTool()
+function EquipHeart()
 	Humanoid:UnequipTools()
+	wait(0.5)
 	local a,b = pcall(function()
 		local ChromaticHeart = PlayerBackpack:FindFirstChild("Chromatic Heart")
 		Humanoid:EquipTool(ChromaticHeart)
-	end)
-	if a then
-		return
-	end
-	local a,b = pcall(function()
-		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zen")
-		Humanoid:EquipTool(BookOfZen)
-	end)
-	if a then
-		return
-	end
-	local a,b = pcall(function()
-		local RubyOfDestiny = PlayerBackpack:FindFirstChild("Ruby of Destiny")
-		Humanoid:EquipTool(RubyOfDestiny)
 	end)
 end
 
 -- START AUTO HATCHING & FISHING
 
 teleport(FishingTeleportCFrame)
-equipBestTool()
+wait(0.5)
+EquipHeart()
 
 
 
@@ -142,7 +130,8 @@ spawn(function()
 				DungeonLeaveRemote:FireServer()
 				wait(2)
 				teleport(FishingTeleportCFrame)
-				equipBestTool()
+				wait(2)
+				EquipHeart()
 			end
 		end
 	end)
