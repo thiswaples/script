@@ -52,21 +52,23 @@ end
 
 function equipBestTool()
 	Humanoid:UnequipTools()
-	wait(1)
-	pcall(function()
+	local a,b = pcall(function()
 		local ChromaticHeart = PlayerBackpack:FindFirstChild("Chromatic Heart")
 		Humanoid:EquipTool(ChromaticHeart)
-		return
 	end)
-	pcall(function()
+	if a then
+		return
+	end
+	local a,b = pcall(function()
 		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zen")
 		Humanoid:EquipTool(BookOfZen)
-		return
 	end)
-	pcall(function()
+	if a then
+		return
+	end
+	local a,b = pcall(function()
 		local RubyOfDestiny = PlayerBackpack:FindFirstChild("Ruby of Destiny")
 		Humanoid:EquipTool(RubyOfDestiny)
-		return
 	end)
 end
 
@@ -131,17 +133,27 @@ end
 
 
 function StartAutoHatchingAndFishing()
+	
+	
 	spawn(function()
+
+		local FishRemote = nil
+		local HatchRemote = nil
+		
 		local succ,err = pcall(function()
 			local Remotes = findRemotes()
-			while wait(.1) do
-				Remotes[0]:InvokeServer()
-				Remotes[1]:InvokeServer()
-			end
+			HatchRemote = Remotes[0]
+			FishRemote = Remotes[1]
 		end)
 		if err then
 			wait(5)
 			StartAutoHatchingAndFishing()
+		else
+			while wait(.1) do
+				print("FIRED!")
+				FishRemote:InvokeServer()
+				HatchRemote:InvokeServer()
+			end
 		end
 	end)
 end
@@ -175,13 +187,12 @@ spawn(function()
 		while wait(1) do
 			if DungeonTextUI.Text == "" then
 				teleport(DungeonEntranceCFrame)
-				wait(2)
+				wait(1)
 				teleport(DungeonChestCFrame)
-				wait(3)
-				DungeonLeaveRemote:FireServer()
-				wait(3)
-				teleport(FishingTeleportCFrame)
 				wait(2)
+				DungeonLeaveRemote:FireServer()
+				wait(2)
+				teleport(FishingTeleportCFrame)
 				equipBestTool()
 			end
 		end
