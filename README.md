@@ -96,32 +96,25 @@ function findRemotes()
 		local RollCountChanged = false
 		local FishedCountChanged = false
 		
-		PlayerGui.Main.Stats.Frame.Rolls.Value.Changed:Connect(function()
-			RollCountChanged = true
-			print("Changed 1!")
-		end)
+		local OldRollsCount = nil
+		local OldFishedCount = nil
 		
-		PlayerGui.Main.Stats.Frame.Fished.Value.Changed:Connect(function()
-			FishedCountChanged = true
-			print("Changed 2!")
-		end)
-		print(PlayerGui.Main.Stats.Frame.Rolls.Value.Text)
-		print(PlayerGui.Main.Stats.Frame.Fished.Value.Text)
 		
 		while FishingRemote==nil or HatchingRemote==nil do
 			for i,v in HashedRemotes do
-				RollCountChanged = false
-				FishedCountChanged = false
+				
+				OldRollsCount = PlayerGui.Main.Stats.Frame.Rolls.Value.Text
+				OldFishedCount = PlayerGui.Main.Stats.Frame.Fished.Value.Text
 				
 				v:InvokeServer()
 				wait(2)
 				
-				if RollCountChanged then
+				if OldRollsCount ~= PlayerGui.Main.Stats.Frame.Rolls.Value.Text then
 					HatchingRemote = v
 					print("Hatching setted!")
 				end
 				
-				if FishedCountChanged then
+				if OldFishedCount ~= PlayerGui.Main.Stats.Frame.Fished.Value.Text then
 					FishingRemote = v
 					print("Fishing setted!")
 				end
