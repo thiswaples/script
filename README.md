@@ -52,6 +52,7 @@ end
 
 function equipBestTool()
 	Humanoid:UnequipTools()
+	wait(1)
 	pcall(function()
 		local ChromaticHeart = PlayerBackpack:FindFirstChild("Chromatic Heart")
 		Humanoid:EquipTool(ChromaticHeart)
@@ -71,27 +72,79 @@ end
 teleport(FishingTeleportCFrame)
 equipBestTool()
 
-spawn(function()
-	local CanAutoHatch,err1 = pcall(function()
-		local HatchingRemote = ReplicatedStorageService.Remotes.Hatching.Hatch
-		spawn(function()
-			while wait(.1) do
-				HatchingRemote:InvokeServer()
-			end
-		end)
-	end)
-end)
 
-spawn(function()
-	local CanAutoFishing,err1 = pcall(function()
-		local FishingRemote = ReplicatedStorageService.Remotes.Fish
-		spawn(function()
+
+function findRemotes()
+	pcall(function()
+		
+		local FishingRemote = nil
+		local HatchingRemote = nil
+		
+		local HashedRemotes = {}
+		
+		for i,v in ReplicatedStorageService.Remotes:GetDescendants() do
+			if #v.Name == 36 then
+				table.insert(HashedRemotes,v)
+			end
+		end
+		
+		local RollCountChanged = false
+		local FishedCountChanged = false
+		
+		PlayerGui.Main.Stats.Frame.Rolls.Value.Changed:Connect(function()
+			RollCountChanged = true
+		end)
+		
+		PlayerGui.Main.Stats.Frame.Fished.Value.Changed:Connect(function()
+			RollCountChanged = true
+		end)
+		
+		while FishingRemote==nil or HatchingRemote==nil do
+			for i,v in HashedRemotes do
+				RollCountChanged = false
+				FishedCountChanged = false
+				
+				v:InvokeServer()
+				wait(2)
+				
+				if RollCountChanged then
+					HatchingRemote = v
+				end
+				
+				if FishedCountChanged then
+					FishingRemote = v
+				end
+			end
+			
+		end
+		
+		if HatchingRemote == nil or FishingRemote==nil then
+			return findRemotes()
+		end
+		
+		return {[0]=HatchingRemote,[1]=FishingRemote}		
+	end)
+end
+
+
+function StartAutoHatchingAndFishing()
+	spawn(function()
+		local succ,err = pcall(function()
+			local Remotes = findRemotes()
 			while wait(.1) do
-				FishingRemote:InvokeServer()
+				Remotes[0]:InvokeServer()
+				Remotes[1]:InvokeServer()
 			end
 		end)
+		if err then
+			wait(5)
+			StartAutoHatchingAndFishing()
+		end
 	end)
-end)
+end
+
+StartAutoHatchingAndFishing()
+
 
 
 -- START AUTO DUNGEON
@@ -125,8 +178,16 @@ spawn(function()
 				DungeonLeaveRemote:FireServer()
 				wait(3)
 				teleport(FishingTeleportCFrame)
+				wait(2)
 				equipBestTool()
 			end
 		end
 	end)
 end)
+
+
+
+
+
+
+
