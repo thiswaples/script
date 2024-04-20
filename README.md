@@ -80,6 +80,7 @@ equipBestTool()
 
 
 function findRemotes()
+	pcall(function()
 		
 		local FishingRemote = nil
 		local HatchingRemote = nil
@@ -92,41 +93,32 @@ function findRemotes()
 			end
 		end
 		
-		print("Debug")
+		local GetDataRemote = ReplicatedStorageService.Remotes:FindFirstChild("GetData")
+		GetDataRemote:InvokeServer()
 		
-		local adfgbn = PlayerGui.Main.Stats.Frame.Rolls.Value
-		print("Stats : "..adfgbn.Text)
+		local StatsFolder = PlayerGui.Main.Stats.Frame
 		
-		--local RollCountChanged = false
-		--local FishedCountChanged = false
-		
-		--PlayerGui.Main.Stats.Frame.Rolls["Value"].Changed:Connect(function()
-		--	RollCountChanged = true
-		--	print("Changed 1!")
-		--end)
-		
-		--PlayerGui.Main.Stats.Frame.Fished["Value"].Changed:Connect(function()
-		--	FishedCountChanged = true
-		--	print("Changed 2!")
-		--end)
 		
 		while FishingRemote==nil or HatchingRemote==nil do
 			for i,v in HashedRemotes do
-				--RollCountChanged = false
-				--FishedCountChanged = false
+				local OldFishingStat = StatsFolder.Fished.Value.Text
+				local OldHatchingStat = StatsFolder.Rolls.Value.Text
 				
-				print(PlayerGui.Main.Stats.Frame.Fished.Value.Text)
-				print("pov j'ai mis un pcall mais ça fais quand même une erreur mdr c'est lhopital qui sfout dla charité")
-				pcall(function()
-					v:InvokeServer()
-				end)
-				
+				v:InvokeServer()
 				wait(2)
 				
 				--if RollCountChanged then
 				--	HatchingRemote = v
 				--	print("Hatching setted!")
 				--end
+				
+				if OldHatchingStat ~= StatsFolder.Rolls.Value.Text then
+					HatchingRemote = v
+				end
+				
+				if OldFishingStat ~= StatsFolder.Fished.Value.Text then
+					FishingRemote = v
+				end
 				
 				--if FishedCountChanged then
 				--	FishingRemote = v
@@ -136,10 +128,9 @@ function findRemotes()
 			
 		end
 		
-		return {[0]=HatchingRemote,[1]=FishingRemote}
+		return {[0]=HatchingRemote,[1]=FishingRemote}		
+	end)
 end
-
-findRemotes()
 
 
 function StartAutoHatchingAndFishing()
@@ -156,6 +147,7 @@ function StartAutoHatchingAndFishing()
 			FishRemote = Remotes[1]
 		end)
 		if err then
+			print(err)
 			wait(5)
 			StartAutoHatchingAndFishing()
 		else
