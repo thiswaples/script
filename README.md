@@ -142,6 +142,7 @@ function findRemotes()
 	--end)
 end
 
+findRemotes()
 
 function StartAutoHatchingAndFishing()
 	
