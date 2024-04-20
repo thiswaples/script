@@ -92,8 +92,10 @@ function findRemotes()
 			end
 		end
 		
-		print(HashedRemotes)
-		print(#HashedRemotes)
+		print("Debug")
+		
+		local adfgbn = PlayerGui.Main.Stats.Frame.Rolls.Value
+		print("Stats : "..adfgbn.Text)
 		
 		--local RollCountChanged = false
 		--local FishedCountChanged = false
@@ -133,6 +135,8 @@ function findRemotes()
 		
 		return {[0]=HatchingRemote,[1]=FishingRemote}
 end
+
+findRemotes()
 
 
 function StartAutoHatchingAndFishing()
