@@ -128,7 +128,12 @@ function findRemotes()
 			
 		end
 		
-		return {[0]=HatchingRemote,[1]=FishingRemote}		
+		
+		local return_ = {}
+		table.insert(return_,HatchingRemote)
+		table.insert(return_,FishingRemote)
+		
+		return return_	
 	end)
 end
 
