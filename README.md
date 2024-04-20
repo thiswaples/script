@@ -116,7 +116,7 @@ function findRemotes()
 				--FishedCountChanged = false
 				
 				print(PlayerGui.Main.Stats.Frame.Fished.Value.Text)
-				
+				print("pov j'ai mis un pcall mais ça fais quand même une erreur mdr c'est lhopital qui sfout dla charité")
 				pcall(function()
 					v:InvokeServer()
 				end)
