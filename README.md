@@ -80,7 +80,7 @@ equipBestTool()
 
 
 function findRemotes()
-	pcall(function()
+	--pcall(function()
 		
 		local FishingRemote = nil
 		local HatchingRemote = nil
@@ -104,7 +104,9 @@ function findRemotes()
 				local OldFishingStat = StatsFolder.Fished.Value.Text
 				local OldHatchingStat = StatsFolder.Rolls.Value.Text
 				
+				pcall(function()
 				v:InvokeServer()
+				end)
 				wait(2)
 				
 				--if RollCountChanged then
@@ -113,10 +115,12 @@ function findRemotes()
 				--end
 				
 				if OldHatchingStat ~= StatsFolder.Rolls.Value.Text then
+					print("zefg")
 					HatchingRemote = v
 				end
 				
 				if OldFishingStat ~= StatsFolder.Fished.Value.Text then
+					print("er")
 					FishingRemote = v
 				end
 				
@@ -134,7 +138,7 @@ function findRemotes()
 		table.insert(return_,FishingRemote)
 		
 		return return_	
-	end)
+	--end)
 end
 
 
