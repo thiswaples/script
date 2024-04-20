@@ -79,101 +79,37 @@ equipBestTool()
 
 
 
-function findRemotes()
-	--pcall(function()
-		
-		local FishingRemote = nil
-		local HatchingRemote = nil
-		
-		local HashedRemotes = {}
-		
-		for i,v in ReplicatedStorageService.Remotes:GetDescendants() do
-			if v:IsA("RemoteFunction") and #v.Name == 36 then
-				table.insert(HashedRemotes,v)
-			end
+function FindHatchingRemote()
+	for i,v in ReplicatedStorageService.Remotes.Hatching:GetDescendants() do
+		if v:IsA("RemoteFunction") and #v.Name == 36 then
+			return v
 		end
-		
-		local StatsFolder = PlayerGui.Main.Stats.Frame
-		
-		
-		while FishingRemote==nil or HatchingRemote==nil do
-			for i,v in HashedRemotes do
-				local OldFishingStat = StatsFolder.Fished.Value.Text
-				local OldHatchingStat = StatsFolder.Rolls.Value.Text
-				
-				if OldFishingStat =="0" or OldHatchingStat =="0" then
-					wait(.1)
-					continue
-				end
-				
-				v:InvokeServer()
-				
-				wait(2)
-				
-				--if RollCountChanged then
-				--	HatchingRemote = v
-				--	print("Hatching setted!")
-				--end
-				
-				if OldHatchingStat ~= StatsFolder.Rolls.Value.Text then
-					print("zefg")
-					HatchingRemote = v
-				end
-				
-				if OldFishingStat ~= StatsFolder.Fished.Value.Text then
-					print("er")
-					FishingRemote = v
-				end
-				
-				--if FishedCountChanged then
-				--	FishingRemote = v
-				--	print("Fishing setted!")
-				--end
-			end
-			
-		end
-		
-		
-		local return_ = {}
-		table.insert(return_,HatchingRemote)
-		table.insert(return_,FishingRemote)
-		
-		return return_	
-	--end)
+	end
 end
 
-findRemotes()
+local HatchRemote = nil
 
-function StartAutoHatchingAndFishing()
-	
-	
-	spawn(function()
-
-		local FishRemote = nil
-		local HatchRemote = nil
-		
-		local succ,err = pcall(function()
-			local Remotes = findRemotes()
-			HatchRemote = Remotes[0]
-			FishRemote = Remotes[1]
+spawn(function()
+	while HatchRemote == nil do
+		local a,b = pcall(function()
+			HatchRemote = FindHatchingRemote()
 		end)
-		if err then
-			print(err)
-			wait(5)
-			StartAutoHatchingAndFishing()
-		else
-			while wait(.1) do
-				print("FIRED!")
-				FishRemote:InvokeServer()
+		wait(.5)
+	end
+end)
+
+spawn(function()
+	while wait(.1) do
+		local a,b = pcall(function()
+			if HatchRemote ~= nil then
 				HatchRemote:InvokeServer()
 			end
+		end)
+		if not a then
+			print(b)
 		end
-	end)
-end
-
-StartAutoHatchingAndFishing()
-
-
+	end
+end)
 
 -- START AUTO DUNGEON
 spawn(function()
