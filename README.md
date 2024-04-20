@@ -56,14 +56,17 @@ function equipBestTool()
 	pcall(function()
 		local ChromaticHeart = PlayerBackpack:FindFirstChild("Chromatic Heart")
 		Humanoid:EquipTool(ChromaticHeart)
+		return
 	end)
 	pcall(function()
 		local BookOfZen = PlayerBackpack:FindFirstChild("Book Of Zen")
 		Humanoid:EquipTool(BookOfZen)
+		return
 	end)
 	pcall(function()
 		local RubyOfDestiny = PlayerBackpack:FindFirstChild("Ruby of Destiny")
 		Humanoid:EquipTool(RubyOfDestiny)
+		return
 	end)
 end
 
