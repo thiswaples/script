@@ -106,8 +106,8 @@ function findRemotes()
 				OldRollsCount = PlayerGui.Main.Stats.Frame.Rolls.Value.Text
 				OldFishedCount = PlayerGui.Main.Stats.Frame.Fished.Value.Text
 				
-				print(OldRollsCount)
-				print(OldFishedCount)
+				print("Rolls: "..OldRollsCount)
+				print("Fished: "..OldFishedCount)
 				
 				v:InvokeServer()
 				wait(2)
