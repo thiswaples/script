@@ -80,7 +80,6 @@ equipBestTool()
 
 
 function findRemotes()
-	pcall(function()
 		
 		local FishingRemote = nil
 		local HatchingRemote = nil
@@ -132,8 +131,7 @@ function findRemotes()
 			
 		end
 		
-		return {[0]=HatchingRemote,[1]=FishingRemote}		
-	end)
+		return {[0]=HatchingRemote,[1]=FishingRemote}
 end
 
 
