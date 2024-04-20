@@ -113,7 +113,7 @@ function findRemotes()
 				--RollCountChanged = false
 				--FishedCountChanged = false
 				
-				--print(PlayerGui.Main.Stats.Frame.Fished["Value"].Text)
+				print(PlayerGui.Main.Stats.Frame.Fished["Value"].Text)
 				
 				v:InvokeServer()
 				wait(2)
