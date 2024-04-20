@@ -123,10 +123,6 @@ function findRemotes()
 			
 		end
 		
-		if HatchingRemote == nil or FishingRemote==nil then
-			return findRemotes()
-		end
-		
 		return {[0]=HatchingRemote,[1]=FishingRemote}		
 	end)
 end
