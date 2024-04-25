@@ -65,77 +65,75 @@ teleport(FishingTeleportCFrame)
 wait(0.5)
 EquipHeart()
 
-
-
-function FindHatchingRemote()
-	for i,v in ReplicatedStorageService.Remotes.Hatching:GetDescendants() do
-		if v:IsA("RemoteFunction") and #v.Name == 36 then
-			return v
-		end
-	end
-end
-
-local HatchRemote = nil
-
-spawn(function()
-	while HatchRemote == nil do
-		local a,b = pcall(function()
-			HatchRemote = FindHatchingRemote()
-		end)
-		wait(.5)
-	end
-end)
-
-spawn(function()
-	while wait(.1) do
-		local a,b = pcall(function()
-			if HatchRemote ~= nil then
-				HatchRemote:InvokeServer()
-			end
-		end)
-		if not a then
-			print(b)
-		end
-	end
-end)
-
 -- START AUTO DUNGEON
+
 spawn(function()
-	local DungeonEntranceCFrame = nil
 	local DungeonLeaveRemote = nil
-	local DungeonChestCFrame = nil
-	local DungeonTextUI = nil
+	local EasyEntranceCFrame = nil
+	local HardEntranceCFrame = nil
+	local EasyTimer = nil
+	local HardTimer = nil
 	
 	local CanDungeon,err = pcall(function()
 		local EasyDungeonFolder = workspace.ScriptedMap.Dungeons.Easy
-		DungeonEntranceCFrame = EasyDungeonFolder.Door.Main.CFrame
-		DungeonTextUI = EasyDungeonFolder.Door.Main.SurfaceGui.Frame.Text
-		for i,v in EasyDungeonFolder:GetChildren() do
-			for ii,vv in v:GetChildren() do
-				if vv.Name == "DUNGEON CHEST 1" then
-					DungeonChestCFrame = vv["Plane.001"].CFrame
-				end
-			end
-		end
+		local HardDungeonFolder = workspace.ScriptedMap.Dungeons.Hard
+		EasyEntranceCFrame = EasyDungeonFolder.Door.Main.CFrame
+		EasyTimer = EasyDungeonFolder.Door.Main.SurfaceGui.Frame.Text
+		
+		HardEntranceCFrame = HardDungeonFolder.Door.Main.CFrame
+		HardTimer = HardDungeonFolder.Door.Main.SurfaceGui.Frame.Text
 		DungeonLeaveRemote = ReplicatedStorageService.Remotes.LeftDungeon
 		
 		wait(5)
-		
+		local moved = false
 		while wait(1) do
-			if DungeonTextUI.Text == "" then
-				teleport(DungeonEntranceCFrame)
-				wait(1)
-				teleport(DungeonChestCFrame)
+			if EasyTimer.Text == "" then
+				teleport(EasyEntranceCFrame)
+				wait(2)
+				
+				pcall(function()
+					for i,v in EasyDungeonFolder:GetDescendants() do
+						if v.Name == "Plane.001" then
+							teleport(v.CFrame)
+						end
+					end
+				end)
 				wait(2)
 				DungeonLeaveRemote:FireServer()
 				wait(2)
-				teleport(FishingTeleportCFrame)
+				moved = true
+			end
+			if HardTimer.Text == "" then
+				teleport(HardEntranceCFrame)
+				
+				wait(10)
+				
+				pcall(function()
+					for i,v in HardDungeonFolder:GetDescendants() do
+						if v.Name == "Plane.001" then
+							teleport(v.CFrame)
+						end
+					end
+				end)
 				wait(2)
+				DungeonLeaveRemote:FireServer()
+				wait(2)
+				moved = true
+				
+			end
+			if moved then
+				teleport(FishingTeleportCFrame)
 				EquipHeart()
+				moved = false
 			end
 		end
 	end)
+	
+	if not CanDungeon then
+		print(err)
+	end
 end)
+
 
 
 
